@@ -1,0 +1,26 @@
+services:
+  - type: web
+    name: wds-inventory
+    runtime: python
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn app:app
+    healthCheckPath: /health
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: wds-inventory-db
+          property: connectionString
+      - key: ADMIN_EMAIL
+        value: wds@telus.net
+      - key: ADMIN_PASSWORD
+        sync: false
+      - key: SESSION_SECRET
+        generateValue: true
+      - key: COOKIE_SECURE
+        value: "true"
+databases:
+  - name: wds-inventory-db
+    plan: free
+    databaseName: wds_inventory
+    user: wds_inventory
