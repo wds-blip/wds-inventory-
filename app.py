@@ -90,7 +90,7 @@ def products():
         pattern='%'+q+'%'; params=[pattern]*5
     with db() as conn:
         rows=conn.execute(f'''SELECT id,brand,category,part_number,name,purchase_price,list_price,quantity,location,memo
-          FROM products {where} ORDER BY brand,name LIMIT 500''',params).fetchall()
+          FROM products {where} ORDER BY brand,name LIMIT 2000''',params).fetchall()
         totals=conn.execute('''SELECT count(*) AS items, coalesce(sum(quantity),0) AS units,
           coalesce(sum(quantity*coalesce(purchase_price,0)),0) AS cost_value,
           coalesce(sum(quantity*coalesce(list_price,0)),0) AS list_value,
