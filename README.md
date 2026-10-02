@@ -18,6 +18,7 @@ pip install -r requirements.txt
 export DATABASE_URL='postgresql://...'
 export ADMIN_EMAIL='wds@telus.net'
 export ADMIN_PASSWORD='set-a-strong-password'
+export COOKIE_SECURE='false'
 export SESSION_SECRET='a-long-random-secret'
 python app.py
 ```
