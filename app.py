@@ -30,6 +30,12 @@ def init_db():
         conn.execute('''CREATE TABLE IF NOT EXISTS inventory_movements (
           id BIGSERIAL PRIMARY KEY, product_id BIGINT NOT NULL REFERENCES products(id), delta INTEGER NOT NULL,
           quantity_after INTEGER NOT NULL, note TEXT NOT NULL DEFAULT '', changed_by TEXT NOT NULL, created_at TIMESTAMPTZ NOT NULL DEFAULT now())''')
+        conn.execute('''CREATE TABLE IF NOT EXISTS inventory_data_migrations (
+          migration_key TEXT PRIMARY KEY, applied_at TIMESTAMPTZ NOT NULL DEFAULT now())''')
+        correction=conn.execute('''INSERT INTO inventory_data_migrations(migration_key)
+          VALUES ('uncount-abh-a110hdc095-20261002') ON CONFLICT DO NOTHING RETURNING migration_key''').fetchone()
+        if correction:
+            conn.execute('UPDATE products SET counted_at=NULL WHERE part_number=%s',('ABH-A110HDC095',))
 
 def require_login(fn):
     @wraps(fn)
